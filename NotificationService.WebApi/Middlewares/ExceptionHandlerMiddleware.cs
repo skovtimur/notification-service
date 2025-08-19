@@ -13,8 +13,6 @@ public class ExceptionHandlerMiddleware(
         try
         {
             await next(context);
-            //След компоненты вызываеться, если возникает ошибка мидллвеер работает в обратную сторону
-            //Доходя до этого try-catch exception обрабатываеться
         }
         catch (Exception ex)
         {

@@ -46,7 +46,6 @@ builder.Services.AddQuartz(x =>
 });
 builder.Services.AddQuartzHostedService(x => x.WaitForJobsToComplete = true);
 
-//Чтобы в swagger enum были видны как строки
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {

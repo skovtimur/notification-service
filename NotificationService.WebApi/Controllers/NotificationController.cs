@@ -1,6 +1,5 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using NotificationService.Application.Abstraction;
 using NotificationService.Application.BackgroundJobs;
 using NotificationService.Application.BackgroundJobs.Listeners;
@@ -9,7 +8,6 @@ using NotificationService.Domain.Exceptions;
 using NotificationService.Domain.Extensions;
 using NotificationService.Domain.Models.NotificationDtos;
 using NotificationService.Domain.ValueObjects;
-using NotificationService.Infrastructure.Database;
 using NotificationService.WebApi.Extensions;
 using NotificationService.WebApi.Filters;
 using NotificationService.WebApi.Queries;
