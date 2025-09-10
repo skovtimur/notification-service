@@ -1,6 +1,5 @@
 using NotificationService.Application.Abstraction;
 using NotificationService.Application.BackgroundJobs.Listeners;
-using NotificationService.Infrastructure.Database;
 using NotificationService.Infrastructure.Services;
 using NotificationService.WebApi.Filters;
 

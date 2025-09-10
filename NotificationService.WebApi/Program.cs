@@ -1,13 +1,10 @@
-using System.Collections.Specialized;
 using System.Text.Json.Serialization;
 using NotificationService.Application.Options;
 using NotificationService.Infrastructure.Database;
-using NotificationService.WebApi;
+using NotificationService.WebApi.Controllers;
 using NotificationService.WebApi.Extensions;
 using NotificationService.WebApi.Mapper;
 using Quartz;
-using Quartz.Impl;
-using Quartz.Impl.AdoJobStore;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -24,26 +21,7 @@ builder.Host.UseSerilog((ctx, lc) => lc
     .ReadFrom.Configuration(ctx.Configuration.GetRequiredSection("Serilog")).WriteTo.Console());
 
 
-builder.Services.AddQuartz(x =>
-{
-    x.UseMicrosoftDependencyInjectionJobFactory();
-    // x.UsePersistentStore(store =>
-    // {
-    //     var connectionString = builder.Configuration.GetRequredValue("UserSecrets:PostgresConnectionString");
-    //     var tablePrefix = builder.Configuration.GetRequredValue("Quartz:TablePrefix");
-    //
-    //     store.UseProperties = true;
-    //     store.UseNewtonsoftJsonSerializer();
-    //
-    //     store.UsePostgres(postgresOptions =>
-    //     {
-    //         postgresOptions.UseDriverDelegate<PostgreSQLDelegate>();
-    //         postgresOptions.ConnectionString = connectionString;
-    //         postgresOptions.TablePrefix = tablePrefix;
-    //     });
-    //     store.PerformSchemaValidation = true;
-    // });
-});
+builder.Services.AddQuartz(x => { x.UseMicrosoftDependencyInjectionJobFactory(); });
 builder.Services.AddQuartzHostedService(x => x.WaitForJobsToComplete = true);
 
 builder.Services.AddControllers()
@@ -55,9 +33,7 @@ builder.Services.AddControllers()
 builder.Services.AddSwaggerGen();
 builder.Services.AddDependencyInjection();
 
-// Options
-builder.Services.Configure<EmailOptions>(builder.Configuration
-    .GetRequiredSection(EmailOptions.PathToOption));
+builder.Services.Configure<EmailOptions>(builder.Configuration.GetRequiredSection(EmailOptions.PathToOption));
 
 var app = builder.Build();
 app.UseExceptionHandlerMiddleware();
@@ -70,12 +46,16 @@ else
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+
+    app.MapGet("/", () => Results.Redirect("/swagger/index.html"))
+        .ExcludeFromDescription();
 }
+
 app.UseSerilogRequestLogging();
 app.ApplyMigration();
 
 
-app.UseCors();
+app.UseCors(x => { x.AllowAnyHeader().WithHeaders(TaskController.TaskQuantityHeader).AllowAnyOrigin(); });
 app.UseRouting();
 
 app.MapControllers();

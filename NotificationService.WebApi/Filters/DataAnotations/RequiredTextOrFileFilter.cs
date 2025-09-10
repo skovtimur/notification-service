@@ -7,8 +7,6 @@ public class RequiredTextOrFileFilter : ValidationAttribute
 {
     protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
     {
-        var logger = validationContext.GetRequiredService<ILogger<ValidationFilter>>();
-
         if (value is not BaseNotifyQuery query)
             return new ValidationResult("The Value must be of type BaseNotifyQuery");
 

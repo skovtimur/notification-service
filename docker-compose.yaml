@@ -1,0 +1,40 @@
+services:
+  notification_service:
+    container_name: notification-service
+    build:
+      context: .
+      dockerfile: NotificationService.WebApi/Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+      ASPNETCORE_HTTP_PORTS: 80
+    ports:
+      - "80:80"
+    depends_on:
+      postgres_db:
+        condition: service_healthy
+    volumes:
+      - /home/timur/.microsoft/usersecrets/fbe5cdf4-a632-4a1c-a6b1-a2dbfa7b1985:/root/.microsoft/usersecrets/fbe5cdf4-a632-4a1c-a6b1-a2dbfa7b1985
+  
+  postgres_db:
+    image: postgres:latest
+    container_name: postgres-db
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: nigPostgres_Pas5432
+      POSTGRES_DB: notificationservicedb
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-U", "postgres" ]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+volumes:
+  pgdata:
+
+networks:
+  app-network:
+    driver: bridge

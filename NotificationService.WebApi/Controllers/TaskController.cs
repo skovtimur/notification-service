@@ -1,7 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using NotificationService.Application.Abstraction;
-using NotificationService.Application.BackgroundJobs.Listeners;
 using NotificationService.Domain.Enums;
 using NotificationService.WebApi.Filters;
 using NotificationService.WebApi.Queries;

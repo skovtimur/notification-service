@@ -7,14 +7,14 @@ namespace NotificationService.WebApi.Extensions;
 
 public static class MapperExtensions
 {
-    public static async Task<EmailNotificationDto?> ToEmailNotificationDto(this EmailNotifyQuery query)
+    public static async Task<EmailNotificationDto> ToEmailNotificationDto(this EmailNotifyQuery query)
     {
         FileDto? fileDto = null;
 
         if (query.File != null)
             fileDto = await query.File.ToFileDto();
 
-        return new EmailNotificationDto()
+        return new EmailNotificationDto
         {
             Emails = query.Emails,
             File = fileDto,
@@ -26,7 +26,7 @@ public static class MapperExtensions
         };
     }
 
-    public static async Task<TelegramNotificationDto?> ToTelegramNotificationDto(this TelegramNotifyQuery query,
+    public static async Task<TelegramNotificationDto> ToTelegramNotificationDto(this TelegramNotifyQuery query,
         List<TelegramIdValueObject> telegramIds)
     {
         FileDto? fileDto = null;
@@ -35,7 +35,7 @@ public static class MapperExtensions
             fileDto = await query.File.ToFileDto();
 
 
-        return new TelegramNotificationDto()
+        return new TelegramNotificationDto
         {
             ChatIdValueObjects = telegramIds,
             File = fileDto,
@@ -45,4 +45,10 @@ public static class MapperExtensions
             BotApiKey = query.BotApiKey
         };
     }
+}
+
+public class MappingException(string reason, string message) : Exception
+{
+    public string ReasonOfFailure { get; } = reason;
+    public override string Message { get; } = message;
 }

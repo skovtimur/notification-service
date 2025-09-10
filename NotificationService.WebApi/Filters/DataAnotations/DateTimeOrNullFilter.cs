@@ -6,8 +6,6 @@ public class DateTimeOrNullFilter : ValidationAttribute
 {
     protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
     {
-        var logger = validationContext.GetRequiredService<ILogger<ValidationFilter>>();
-
         if (value == null)
             return ValidationResult.Success;
 

@@ -14,7 +14,7 @@ public class AllowedMimeFileTypeFilter : ValidationAttribute
 
         if (value is IFormFile formFile == false)
         {
-            var errorText = "The object isn't FileModel type";
+            const string errorText = "The object isn't FileModel type";
 
             logger.LogTrace(errorText);
             return new ValidationResult(errorText);
@@ -26,7 +26,7 @@ public class AllowedMimeFileTypeFilter : ValidationAttribute
             || formFile.IsDocument())
             return ValidationResult.Success;
 
-        var notSupportedText = "The File isn't an image, video, audio or document. His type isn't supported.";
+        const string notSupportedText = "The File isn't an image, video, audio or document. His type isn't supported.";
 
         logger.LogTrace(notSupportedText);
         return new ValidationResult(notSupportedText);

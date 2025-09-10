@@ -1,5 +1,7 @@
 .idea/
 .idea
+obj/
+obj
 NotificationService.Application/bin/
 NotificationService.Application/bin
 NotificationService.Application/obj/
@@ -9,11 +11,6 @@ NotificationService.Domain/bin/
 NotificationService.Domain/obj/
 NotificationService.Domain/bin
 NotificationService.Domain/obj
-
-NotificationService.Test/bin/
-NotificationService.Test/obj/
-NotificationService.Test/bin
-NotificationService.Test/obj
 
 NotificationService.Infrastructure/bin/
 NotificationService.Infrastructure/obj/

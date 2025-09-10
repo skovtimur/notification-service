@@ -13,7 +13,6 @@ using NotificationService.WebApi.Filters;
 using NotificationService.WebApi.Queries;
 using Quartz;
 using Quartz.Impl.Matchers;
-using IScheduler = Quartz.IScheduler;
 
 namespace NotificationService.WebApi.Controllers;
 
@@ -60,7 +59,7 @@ public class NotificationController(
         }
         var chatIds = new List<TelegramIdValueObject>();
 
-        foreach (var c in query.ChatIds)
+        foreach (var c in query.ChatIdentifies)
         {
             var chatId = TelegramIdValueObject.Create(c);
 
@@ -129,7 +128,7 @@ public class NotificationController(
         listener.SetName($"job-listener-{newTask.Id}");
 
         var isWithoutWaiting = query.WillDoAt == null;
-        IScheduler scheduler = await schedulerFactory.GetScheduler();
+        var scheduler = await schedulerFactory.GetScheduler();
 
         var jobData = new JobDataMap
         {
@@ -144,7 +143,7 @@ public class NotificationController(
             }
         };
         var jobKey = new JobKey($"job-{newTask.Id}", $"group-{newTask.Id}");
-        IJobDetail job = JobBuilder.Create<TJob>()
+        var job = JobBuilder.Create<TJob>()
             .UsingJobData(jobData)
             .WithIdentity(jobKey)
             .Build();
@@ -154,7 +153,7 @@ public class NotificationController(
             .ForJob(job)
             .WithPriority((int)newTask.Priority);
 
-        ITrigger trigger = isWithoutWaiting
+        var trigger = isWithoutWaiting
             ? triggerBuilder.StartNow().Build()
             : triggerBuilder.StartAt(startTimeUtc: (DateTime)query.WillDoAt!).Build();
 
